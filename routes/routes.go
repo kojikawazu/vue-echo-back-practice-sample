@@ -13,4 +13,6 @@ func InitRoutes(e *echo.Echo) {
 	e.GET("/", controllers.TestHandler)
 
 	e.GET("/users", controllers.GetUsers)
+
+	e.GET("/todos", controllers.GetTodos)
 }
