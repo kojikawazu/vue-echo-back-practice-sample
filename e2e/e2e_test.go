@@ -73,5 +73,24 @@ func TestE2EGetUsers(t *testing.T) {
 	// レスポンスボディを確認
 	body := make([]byte, 1024)
 	n, _ := resp.Body.Read(body)
-	assert.Contains(t, string(body[:n]), "user")
+	assert.Contains(t, string(body[:n]), "username")
+}
+
+func TestE2EGetTodos(t *testing.T) {
+	// テストサーバーをセットアップ
+	server := setupServer()
+	defer server.Close()
+
+	// `/todos`エンドポイントへのリクエストを作成
+	resp, err := http.Get(server.URL + "/todos")
+	assert.NoError(t, err)
+	defer resp.Body.Close()
+
+	// ステータスコードを確認
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	// レスポンスボディを確認
+	body := make([]byte, 1024)
+	n, _ := resp.Body.Read(body)
+	assert.Contains(t, string(body[:n]), "description")
 }

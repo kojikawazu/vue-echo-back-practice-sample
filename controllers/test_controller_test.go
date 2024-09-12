@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestTestHandler は TestHandler のユニットテスト
+// TestHandler のユニットテスト
 func TestTestHandler(t *testing.T) {
 	// Echoインスタンスを作成
 	e := echo.New()
