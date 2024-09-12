@@ -38,3 +38,14 @@ Go言語では、標準ツールであるgodocを使ってソースコードか�
 ```bash
 sudo apt install golang-golang-x-tools
 ```
+
+## テストコード導入
+
+```bash
+# パッケージインストール
+go get github.com/stretchr/testify/assert
+go mod tidy
+
+# テスト実行
+go test ./...
+```
