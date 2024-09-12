@@ -2,10 +2,20 @@ package main
 
 import (
 	"backend/routes"
+	"log"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+func init() {
+	// .envファイルをロード
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
 
 func main() {
 	e := echo.New()

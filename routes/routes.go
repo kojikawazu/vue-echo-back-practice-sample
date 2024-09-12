@@ -10,5 +10,7 @@ import (
  * ルーティングの設定
  */
 func InitRoutes(e *echo.Echo) {
-	e.GET("/test", controllers.TestHandler)
+	e.GET("/", controllers.TestHandler)
+
+	e.GET("/users", controllers.GetUsers)
 }
