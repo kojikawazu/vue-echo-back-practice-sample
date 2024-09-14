@@ -11,19 +11,19 @@ import (
 )
 
 // 実際のTodoコントローラー
-type RealController struct {
+type RealTodoController struct {
 	todoService services.TodoService
 }
 
 // RealControllerのコンストラクタ
-func NewRealController(todoService services.TodoService) *RealController {
-	return &RealController{
+func NewRealTodoController(todoService services.TodoService) *RealTodoController {
+	return &RealTodoController{
 		todoService: todoService,
 	}
 }
 
 // 全てのTodoを取得するハンドラー
-func (c *RealController) GetTodosHandler(ctx echo.Context) error {
+func (c *RealTodoController) GetTodosHandler(ctx echo.Context) error {
 	todos, err := c.todoService.GetAllTodos()
 	if err != nil {
 		ctx.Logger().Errorf("Failed to get todos: %v", err)
@@ -34,7 +34,7 @@ func (c *RealController) GetTodosHandler(ctx echo.Context) error {
 }
 
 // 新しいTodoを作成するハンドラー
-func (c *RealController) CreateTodoHandler(ctx echo.Context) error {
+func (c *RealTodoController) CreateTodoHandler(ctx echo.Context) error {
 	var req models.TodoCreateRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request body"})
@@ -65,7 +65,7 @@ func (c *RealController) CreateTodoHandler(ctx echo.Context) error {
 }
 
 // Todoを更新するハンドラー
-func (c *RealController) UpdateTodoHandler(ctx echo.Context) error {
+func (c *RealTodoController) UpdateTodoHandler(ctx echo.Context) error {
 	id := ctx.Param("id")
 
 	var req models.TodoUpdateRequest
@@ -112,7 +112,7 @@ func (c *RealController) UpdateTodoHandler(ctx echo.Context) error {
 }
 
 // Todoを削除するハンドラー
-func (c *RealController) DeleteTodoHandler(ctx echo.Context) error {
+func (c *RealTodoController) DeleteTodoHandler(ctx echo.Context) error {
 	id := ctx.Param("id")
 
 	err := c.todoService.DeleteTodo(id)

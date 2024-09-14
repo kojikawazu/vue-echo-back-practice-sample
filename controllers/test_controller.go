@@ -1,14 +1,8 @@
 package controllers
 
-import (
-	"net/http"
+import "github.com/labstack/echo/v4"
 
-	"github.com/labstack/echo/v4"
-)
-
-/**
- * テスト用のハンドラー
- */
-func TestHandler(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+// TestControllerのインターフェース
+type TestController interface {
+	TestHandler(c echo.Context) error
 }

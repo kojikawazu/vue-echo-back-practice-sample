@@ -5,7 +5,7 @@ import (
 )
 
 // Todoコントローラーのインターフェース
-type Controller interface {
+type TodoController interface {
 	CreateTodoHandler(echo.Context) error
 	UpdateTodoHandler(echo.Context) error
 	GetTodosHandler(echo.Context) error
