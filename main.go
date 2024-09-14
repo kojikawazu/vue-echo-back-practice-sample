@@ -26,13 +26,14 @@ func main() {
 	todoService := services.NewRealTodoService(client)
 
 	// コントローラーの初期化
-	todoController := controllers.NewRealController(todoService)
+	todoController := controllers.NewRealTodoController(todoService)
+	testController := controllers.NewRealTestController()
 
 	// Echoのインスタンスを作成
 	e := echo.New()
 
 	// ルーティングの設定
-	routes.SetupRoutes(e, todoController)
+	routes.SetupRoutes(e, todoController, testController)
 
 	// サーバーの起動
 	port := os.Getenv("PORT")

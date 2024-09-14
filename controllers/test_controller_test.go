@@ -14,6 +14,9 @@ func TestTestHandler(t *testing.T) {
 	// Echoインスタンスを作成
 	e := echo.New()
 
+	// テスト用のコントローラーを作成
+	controller := NewRealTestController()
+
 	// テスト用リクエストとレスポンスを作成
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
@@ -22,7 +25,7 @@ func TestTestHandler(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// ハンドラを実行して結果を確認
-	if assert.NoError(t, TestHandler(c)) {
+	if assert.NoError(t, controller.TestHandler(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, "Hello, World!", rec.Body.String())
 	}

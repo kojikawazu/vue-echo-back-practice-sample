@@ -32,7 +32,7 @@ func TestGetTodosHandler(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// 固定された日時
 	fixedTime := models.NewCustomTime(time.Date(2024, time.September, 14, 0, 6, 27, 272515000, time.UTC))
@@ -92,7 +92,7 @@ func TestCreateTodoHandler(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// 環境変数からUserIDを取得
 	userID := os.Getenv("TEST_USER_ID")
@@ -161,7 +161,7 @@ func TestUpdateTodoHandler(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// 環境変数からUserIDを取得
 	userID := os.Getenv("TEST_USER_ID")
@@ -234,7 +234,7 @@ func TestUpdateTodoHandler_NotFound(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// 環境変数からUserIDを取得
 	userID := os.Getenv("TEST_USER_ID")
@@ -295,7 +295,7 @@ func TestUpdateTodoHandler_ServiceError(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// 環境変数からUserIDを取得
 	userID := os.Getenv("TEST_USER_ID")
@@ -358,7 +358,7 @@ func TestDeleteTodoHandler(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// テストデータの準備
 	todoID := "1"
@@ -393,7 +393,7 @@ func TestDeleteTodoHandler_NotFound(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// テストデータの準備
 	todoID := "999"
@@ -436,7 +436,7 @@ func TestDeleteTodoHandler_ServiceError(t *testing.T) {
 	mockService := new(services.MockTodoService)
 
 	// テスト用のコントローラーを作成
-	controller := NewRealController(mockService)
+	controller := NewRealTodoController(mockService)
 
 	// テストデータの準備
 	todoID := "1"

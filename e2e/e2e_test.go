@@ -37,35 +37,37 @@ func setupServer() *echo.Echo {
 	todoService := services.NewRealTodoService(client)
 
 	// コントローラーの初期化
-	todoController := controllers.NewRealController(todoService)
+	todoController := controllers.NewRealTodoController(todoService)
+	testController := controllers.NewRealTestController()
 
 	// Echoのインスタンスを作成
 	e := echo.New()
 
 	// ルーティングの設定（コントローラーを渡す）
-	routes.SetupRoutes(e, todoController)
+	routes.SetupRoutes(e, todoController, testController)
 
 	return e
 }
 
-// func TestE2EHelloWorld(t *testing.T) {
-// 	// テストサーバーをセットアップ
-// 	server := setupServer()
-// 	defer server.Close()
+func TestE2EHelloWorld(t *testing.T) {
+	// サーバーをセットアップ
+	e := setupServer()
 
-// 	// サーバーへのリクエストを作成
-// 	resp, err := http.Get(server.URL + "/")
-// 	assert.NoError(t, err)
-// 	defer resp.Body.Close()
+	// リクエストを作成
+	req := httptest.NewRequest(http.MethodGet, "/test", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
 
-// 	// ステータスコードを確認
-// 	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	// ハンドラーを実行
+	testController := controllers.NewRealTestController()
+	if assert.NoError(t, testController.TestHandler(c)) {
+		// ステータスコードを確認
+		assert.Equal(t, http.StatusOK, rec.Code)
 
-// 	// レスポンスボディを確認
-// 	body := make([]byte, 1024)
-// 	n, _ := resp.Body.Read(body)
-// 	assert.Contains(t, string(body[:n]), "Hello, World!")
-// }
+		// レスポンスボディを確認
+		assert.Contains(t, rec.Body.String(), "Hello, World!")
+	}
+}
 
 // func TestE2EGetUsers(t *testing.T) {
 // 	// テストサーバーをセットアップ
@@ -96,7 +98,7 @@ func TestE2EGetTodos(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// ハンドラーを実行
-	todoController := controllers.NewRealController(services.NewRealTodoService(lib.InitSupabaseClient()))
+	todoController := controllers.NewRealTodoController(services.NewRealTodoService(lib.InitSupabaseClient()))
 	if assert.NoError(t, todoController.GetTodosHandler(c)) {
 		// ステータスコードを確認
 		assert.Equal(t, http.StatusOK, rec.Code)
