@@ -8,42 +8,31 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestRoutes(t *testing.T) {
-	// Echoのインスタンスを作成
 	e := echo.New()
 
-	// ルーティングの初期化
-	InitRoutes(e)
+	// モックコントローラーの作成
+	mockController := new(controllers.MockTodoController)
 
-	// `/`ルートのテスト
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	// 期待値を設定
+	mockController.On("GetTodosHandler", mock.Anything).Return(nil)
+
+	// ルートをセットアップ
+	SetupRoutes(e, mockController)
+
+	// テスト用のリクエストとレスポンスの準備
+	req := httptest.NewRequest(http.MethodGet, "/todos", nil)
 	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
 
-	// TestHandlerを実行し、レスポンスの確認
-	if assert.NoError(t, controllers.TestHandler(c)) {
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, "Hello, World!", rec.Body.String())
-	}
-}
+	// Echoのコンテキストを生成してリクエストを実行
+	e.ServeHTTP(rec, req)
 
-func TestUsersRoute(t *testing.T) {
-	// Echoのインスタンスを作成
-	e := echo.New()
+	// ステータスコードの検証
+	assert.Equal(t, http.StatusOK, rec.Code)
 
-	// ルーティングの初期化
-	InitRoutes(e)
-
-	// `/users`ルートのテスト
-	req := httptest.NewRequest(http.MethodGet, "/users", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-
-	// GetUsersを実行し、レスポンスの確認
-	if assert.NoError(t, controllers.GetUsers(c)) {
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Contains(t, rec.Body.String(), "user") // レスポンスが "user" を含むことを確認
-	}
+	// モックが期待通りに呼ばれたかを検証
+	mockController.AssertExpectations(t)
 }

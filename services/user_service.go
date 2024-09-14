@@ -34,5 +34,6 @@ func GetAllUsers() ([]models.User, error) {
 		fmt.Println("Error parsing response:", err)
 		return nil, err
 	}
+
 	return users, nil
 }

@@ -49,3 +49,16 @@ go mod tidy
 # テスト実行
 go test ./...
 ```
+
+## UUID
+
+```bash
+go get github.com/google/uuid
+```
+
+## その他
+
+```bash
+go get github.com/go-playground/validator/v10
+go get github.com/stretchr/testify/mock
+```
