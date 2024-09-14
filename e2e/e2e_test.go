@@ -35,16 +35,18 @@ func setupServer() *echo.Echo {
 
 	// サービスの初期化
 	todoService := services.NewRealTodoService(client)
+	userService := services.NewRealUserService(client)
 
 	// コントローラーの初期化
 	todoController := controllers.NewRealTodoController(todoService)
+	userController := controllers.NewRealUserController(userService)
 	testController := controllers.NewRealTestController()
 
 	// Echoのインスタンスを作成
 	e := echo.New()
 
 	// ルーティングの設定（コントローラーを渡す）
-	routes.SetupRoutes(e, todoController, testController)
+	routes.SetupRoutes(e, todoController, testController, userController)
 
 	return e
 }
@@ -69,24 +71,25 @@ func TestE2EHelloWorld(t *testing.T) {
 	}
 }
 
-// func TestE2EGetUsers(t *testing.T) {
-// 	// テストサーバーをセットアップ
-// 	server := setupServer()
-// 	defer server.Close()
+func TestE2EGetAllUsers(t *testing.T) {
+	// サーバーをセットアップ
+	e := setupServer()
 
-// 	// `/users`エンドポイントへのリクエストを作成
-// 	resp, err := http.Get(server.URL + "/users")
-// 	assert.NoError(t, err)
-// 	defer resp.Body.Close()
+	// リクエストを作成
+	req := httptest.NewRequest(http.MethodGet, "/users", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
 
-// 	// ステータスコードを確認
-// 	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	// ハンドラーを実行
+	userController := controllers.NewRealUserController(services.NewRealUserService(lib.InitSupabaseClient()))
+	if assert.NoError(t, userController.GetAllUsersHandler(c)) {
+		// ステータスコードを確認
+		assert.Equal(t, http.StatusOK, rec.Code)
 
-// 	// レスポンスボディを確認
-// 	body := make([]byte, 1024)
-// 	n, _ := resp.Body.Read(body)
-// 	assert.Contains(t, string(body[:n]), "username")
-// }
+		// レスポンスボディを確認
+		assert.Contains(t, rec.Body.String(), "username")
+	}
+}
 
 func TestE2EGetTodos(t *testing.T) {
 	// サーバーをセットアップ

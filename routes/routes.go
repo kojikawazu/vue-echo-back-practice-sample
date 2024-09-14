@@ -7,17 +7,18 @@ import (
 )
 
 // Echoのルーターにハンドラーを登録
-func SetupRoutes(e *echo.Echo, todoController controllers.TodoController, testController controllers.TestController) {
-
-	//e.GET("/users", controllers.GetUsers)
+func SetupRoutes(e *echo.Echo, todoController controllers.TodoController, testController controllers.TestController, userController controllers.UserController) {
 
 	// ルートグループの作成
 	todos := e.Group("/todos")
 	test := e.Group("/test")
-
-	test.GET("", testController.TestHandler)
+	user := e.Group("/users")
 
 	// ハンドラーの登録
+	test.GET("", testController.TestHandler)
+
+	user.GET("", userController.GetAllUsersHandler)
+
 	todos.GET("", todoController.GetTodosHandler)
 	todos.POST("", todoController.CreateTodoHandler)
 	todos.PUT("/:id", todoController.UpdateTodoHandler)
