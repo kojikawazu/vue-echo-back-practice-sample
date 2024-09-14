@@ -15,15 +15,17 @@ func TestRoutes(t *testing.T) {
 	e := echo.New()
 
 	// モックコントローラーの作成
-	mockTodoController := new(controllers.MockTodoController)
 	mockTestController := new(controllers.MockTestController)
+	mockTodoController := new(controllers.MockTodoController)
+	mockUserController := new(controllers.MockUserController)
 
 	// 期待値を設定
-	mockTodoController.On("GetTodosHandler", mock.Anything).Return(nil)
 	mockTestController.On("TestHandler", mock.Anything).Return(nil)
+	mockTodoController.On("GetTodosHandler", mock.Anything).Return(nil)
+	mockUserController.On("GetAllUsersHandler", mock.Anything).Return(nil)
 
 	// ルートをセットアップ
-	SetupRoutes(e, mockTodoController, mockTestController)
+	SetupRoutes(e, mockTodoController, mockTestController, mockUserController)
 
 	// ------------------------------------------------------------------
 
@@ -54,6 +56,21 @@ func TestRoutes(t *testing.T) {
 
 	// モックが期待通りに呼ばれたかを検証
 	mockTodoController.AssertExpectations(t)
+
+	// ------------------------------------------------------------------
+
+	// テスト用のリクエストとレスポンスの準備
+	req = httptest.NewRequest(http.MethodGet, "/users", nil)
+	rec = httptest.NewRecorder()
+
+	// Echoのコンテキストを生成してリクエストを実行
+	e.ServeHTTP(rec, req)
+
+	// ステータスコードの検証
+	assert.Equal(t, http.StatusOK, rec.Code)
+
+	// モックが期待通りに呼ばれたかを検証
+	mockUserController.AssertExpectations(t)
 
 	// ------------------------------------------------------------------
 }

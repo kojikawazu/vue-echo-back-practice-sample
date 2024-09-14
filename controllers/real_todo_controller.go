@@ -15,7 +15,7 @@ type RealTodoController struct {
 	todoService services.TodoService
 }
 
-// RealControllerのコンストラクタ
+// RealTodoControllerのコンストラクタ
 func NewRealTodoController(todoService services.TodoService) *RealTodoController {
 	return &RealTodoController{
 		todoService: todoService,
