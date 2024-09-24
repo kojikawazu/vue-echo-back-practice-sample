@@ -61,4 +61,5 @@ go get github.com/google/uuid
 ```bash
 go get github.com/go-playground/validator/v10
 go get github.com/stretchr/testify/mock
+go get github.com/labstack/echo/v4/middleware@v4.12.0
 ```
