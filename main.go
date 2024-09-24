@@ -10,6 +10,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -33,6 +34,12 @@ func main() {
 
 	// Echoのインスタンスを作成
 	e := echo.New()
+
+	// CORSを有効化
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{os.Getenv("FRONTEND_URL")},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+	}))
 
 	// ルーティングの設定
 	routes.SetupRoutes(e, todoController, testController, userController)
